@@ -357,12 +357,13 @@
   var TAB_KIND = [null, 'movie', 'tv'];
 
   function renderTop() {
-    $('title').textContent = tr('For You');
+    $('title').textContent = '';
+    $('clock').style.display = 'none';
     var tabs = $('tabs');
     tabs.innerHTML = '';
     var buttons = $('buttons');
     buttons.innerHTML = '';
-    var defs = [['hdmi', tr('HDMI Inputs')], ['settings', tr('light|Settings')]], offset = 3 - defs.length;
+    var defs = [['settings', tr('light|Settings')]], offset = 3 - defs.length;
     for (var b = 0; b < defs.length; b++) {
       var r = el('button', 'round' + (b === defs.length - 1 ? ' last' : ''), buttons);
       r.style.left = (1596 + 88 * (offset + b)) + 'px';
@@ -447,9 +448,9 @@
   var shelfFirst = 0, tileStep = 0, tileLeft = 0;
 
   function renderShelf() {
-    var n = Math.min(shelf.length, SHELF_VISIBLE), gap = 48, pad = 40;
-    // 16:9 tiles, as on Android: never taller than 126, and the glass keeps its bottom edge.
-    var tw = Math.min(126 * 16 / 9, (1760 - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw * 9 / 16;
+    var n = Math.min(shelf.length, SHELF_VISIBLE), gap = 48, pad = 40, maxTileHeight = 190;
+    // 16:9 tiles, enlarged for the two-app layout, with the glass keeping its bottom edge.
+    var tw = Math.min(maxTileHeight * 16 / 9, (1760 - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw * 9 / 16;
     var width = n * tw + Math.max(0, n - 1) * gap, left = (1920 - width) / 2;
     var platter = $('platter');
     platter.style.display = n ? '' : 'none';
@@ -870,8 +871,7 @@
   function activate() {
     switch (st.zone) {
       case Z.TOP:
-        if (st.top === 0) { st.zone = Z.SHELF; openDrawer(); st.drawer = 1 < drawerInputs ? 1 : 0; updateFocus(); }
-        else openSettings();
+        openSettings();
         return;
       case Z.CARDS:
         var p = cards[st.card], app = p && Data.appFor(p.app);
@@ -909,7 +909,7 @@
     switch (st.zone) {
       case Z.SHELF:
         if (dx) st.shelf = Math.max(0, Math.min(shelf.length - 1, st.shelf + dx));
-        else if (dy > 0) { openDrawer(); return; }
+        else if (dy > 0) return;
         else if (dy < 0) {
           if (cards.length) { st.zone = Z.CARDS; st.card = nearest(cardNodes, centerX(tiles[st.shelf])); }
           else { st.zone = Z.TOP; st.top = 0; }
@@ -922,7 +922,7 @@
         break;
       case Z.TOP:
         if (dx) {
-          st.top = Math.max(0, Math.min(1, st.top + dx));
+          st.top = 0;
         } else if (dy > 0) {
           if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
           else st.zone = Z.SHELF;
@@ -1092,7 +1092,6 @@
     renderCards();
     renderShelf();
     renderDrawer();
-    renderClock();
     checkNight();
     if (st.zone === Z.SETTINGS) renderSettings();
     updateFocus();
@@ -1110,7 +1109,7 @@
     TV.apps(function (list) {
       apps = list.filter(function (a) { return !hidden(a); });
       TV.inputs(function (list2) {
-        inputs = list2;
+        inputs = list2.filter(function (x) { return x.key === 'hdmi1'; });
         var hdmi1 = null;
         for (var i = 0; i < inputs.length; i++) if (inputs[i].key === 'hdmi1') { hdmi1 = inputs[i]; break; }
         if (hdmi1) {
@@ -1164,7 +1163,7 @@
   TV.holdScreenSaver(function () { return !sheetOpen() && saverPhotos().length > 0; });
   fit();
   renderTop();
-  tickClock();
+
   loadApps(function () {
     renderAll();
     Data.refresh();
