@@ -304,6 +304,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #homeWeather .home-weather-item .low { margin-left: 5px; font-size: 20px; color: #6E6E73; }
 .night #homeWeather .home-weather-item .low { color: rgba(255, 255, 255, 0.68); }
 
+#dog { position: absolute; left: 18px; bottom: 0; width: 368px; height: 380px; overflow: hidden; pointer-events: none; }
+#dog img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: left bottom; }
+
 /* MARK: - Shelf: the glass bar with the apps, each in its brand color; focused, a tile grows 20% and rises. */
 
 #platter {
