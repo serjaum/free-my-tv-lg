@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ícone de cinema para Caixinha">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd27a"/>
+      <stop offset="0.48" stop-color="#ff9b32"/>
+      <stop offset="1" stop-color="#dc5425"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#333544"/>
+      <stop offset="1" stop-color="#171923"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <rect x="69" y="151" width="374" height="292" rx="35" fill="url(#panel)" stroke="url(#gold)" stroke-width="18"/>
+    <path d="M88 177 105 80a27 27 0 0 1 31-22l282 49a27 27 0 0 1 22 31l-17 97" fill="url(#gold)" stroke="#ffe2ac" stroke-width="9"/>
+    <path d="m139 64 63 11-38 73-63-11zM257 84l62 11-38 73-62-11zM374 105l58 10-38 73-58-10z" fill="#20222b"/>
+    <path d="M128 229h256" fill="none" stroke="#ffbd68" stroke-width="12" opacity=".9"/>
+    <circle cx="256" cy="339" r="75" fill="#20222b" stroke="url(#gold)" stroke-width="16"/>
+    <circle cx="256" cy="339" r="18" fill="#ffbd68"/>
+    <circle cx="256" cy="290" r="17" fill="#ffbd68"/>
+    <circle cx="298" cy="315" r="17" fill="#ffbd68"/>
+    <circle cx="282" cy="365" r="17" fill="#ffbd68"/>
+    <circle cx="230" cy="365" r="17" fill="#ffbd68"/>
+    <circle cx="214" cy="315" r="17" fill="#ffbd68"/>
+    <path d="M354 384h34" stroke="#ff9b32" stroke-width="12"/>
+  </g>
+</svg>

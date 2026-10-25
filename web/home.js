@@ -258,7 +258,7 @@
   var apps = [], shelf = [], others = [], inputs = [];
 
   /** shelf_apps in config.properties: the shelf in that order, by id or name (part of it). */
-  var WANTED = (CONFIG.shelfApps || []).map(function (s) { return s.toLowerCase(); });
+  var WANTED = (CONFIG.shelfApps && CONFIG.shelfApps.length ? CONFIG.shelfApps : ['youtube', 'caixinha']).map(function (s) { return s.toLowerCase(); });
 
   function pickShelf() {
     if (WANTED.length && Prefs.shelfConfig() !== WANTED.join(',')) {
@@ -1121,10 +1121,17 @@
   function loadApps(done) {
     TV.apps(function (list) {
       apps = list.filter(function (a) { return !hidden(a); });
-      Data.setApps(apps);
-      pickShelf();
       TV.inputs(function (list2) {
         inputs = list2;
+        var hdmi1 = null;
+        for (var i = 0; i < inputs.length; i++) if (inputs[i].key === 'hdmi1') { hdmi1 = inputs[i]; break; }
+        if (hdmi1) {
+          var exists = false;
+          for (var j = 0; j < apps.length; j++) if (apps[j].id === hdmi1.id) { exists = true; break; }
+          if (!exists) apps.push({id: hdmi1.id, title: 'Caixinha', icon: 'icons/caixinha.svg', color: '#B85C19'});
+        }
+        Data.setApps(apps);
+        pickShelf();
         if (done) done();
       });
     });
