@@ -358,7 +358,6 @@
 
   function renderTop() {
     $('title').textContent = '';
-    $('clock').style.display = 'none';
     var tabs = $('tabs');
     tabs.innerHTML = '';
     var buttons = $('buttons');
@@ -441,6 +440,40 @@
   function tickClock() {
     renderClock();
     setTimeout(tickClock, 60000 - Date.now() % 60000 + 50);
+  }
+
+  function renderHomeWeather() {
+    var card = $('homeWeather');
+    card.style.left = '80px';
+    card.style.width = '1760px';
+    card.innerHTML = '';
+    if (!Prefs.weather()) { card.style.display = 'none'; return; }
+    card.style.display = '';
+    el('div', 'home-weather-city', card, Data.city || tr('Weather'));
+    var w = Data.weather;
+    if (!w) {
+      el('div', 'home-weather-empty', card, tr('No weather data right now.'));
+      return;
+    }
+    var now = el('div', 'home-weather-current', card);
+    sym(Data.symbol(w.code, w.isDay), now);
+    el('span', 'home-weather-temp', now, Data.degrees(w.temp));
+    el('div', 'home-weather-condition', card, Data.condition(w.code, w.isDay));
+    el('div', 'home-weather-range', card, trf('H:{max}', {max: Data.degrees(w.max)}) + '   ' + trf('L:{min}', {min: Data.degrees(w.min)}));
+    var days = Prefs.forecast() === 'days' && w.days && w.days.length > 0;
+    var list = days ? w.days : w.hours, n = Math.min(days ? 5 : 6, list ? list.length : 0);
+    if (!n) return;
+    var forecast = el('div', 'home-weather-forecast', card);
+    var width = (1760 - 440 - 30) / n;
+    for (var i = 0; i < n; i++) {
+      var item = el('div', 'home-weather-item', forecast), x = list[i];
+      item.style.left = (width * i) + 'px';
+      item.style.width = width + 'px';
+      el('div', 'time', item, days ? Data.weekday(x.at) : Data.hour(x.at));
+      sym(Data.symbol(x.code, days || x.day), item);
+      var temp = el('div', 'temp', item, Data.degrees(days ? x.max : x.temp));
+      if (days) el('span', 'low', temp, Data.degrees(x.min));
+    }
   }
 
   // MARK: - Shelf
@@ -677,9 +710,9 @@
       {label: tr('Theme'), value: theme === 'light' ? tr('Light') : theme === 'dark' ? tr('Dark') : auto,
         step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }},
       {label: tr('Weather widget'), toggle: Prefs.weather(),
-        step: function () { Prefs.set('weather', !Prefs.weather()); renderPanels(); }},
+        step: function () { Prefs.set('weather', !Prefs.weather()); renderPanels(); renderHomeWeather(); }},
       {label: tr('Forecast'), value: Prefs.forecast() === 'days' ? tr('Next days') : tr('Next hours'),
-        step: function (d) { cycle('forecast', ['hours', 'days'], Prefs.forecast(), d); renderPanels(); }},
+        step: function (d) { cycle('forecast', ['hours', 'days'], Prefs.forecast(), d); renderPanels(); renderHomeWeather(); }},
       {label: tr('Quotes widget'), toggle: Prefs.quotes(),
         step: function () { Prefs.set('quotes', !Prefs.quotes()); Data.settingsChanged(); }}
     ];
@@ -1087,6 +1120,8 @@
 
   function renderAll() {
     renderTop();
+    renderClock();
+    renderHomeWeather();
     renderQuotes();
     cards = [];
     renderCards();
@@ -1135,6 +1170,7 @@
   }
 
   Data.onChange(function () {
+    renderHomeWeather();
     renderQuotes();
     renderCards();
     renderPanels();
@@ -1145,7 +1181,7 @@
     // LG: with handlesRelaunch the app has to come to the front itself, or opening it again while it runs shows nothing.
     if (window.PalmSystem && window.PalmSystem.activate) window.PalmSystem.activate();
     reset();
-    loadApps(function () { renderShelf(); renderDrawer(); Data.refresh(); });
+    loadApps(function () { renderShelf(); renderDrawer(); renderHomeWeather(); Data.refresh(); });
   }
 
   window.addEventListener('resize', fit);
@@ -1154,10 +1190,11 @@
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) { hideSaver(); return; }
     idleAt = Date.now();
-    loadApps(function () { renderShelf(); renderDrawer(); updateFocus(); Data.refresh(); });
+    loadApps(function () { renderShelf(); renderDrawer(); renderHomeWeather(); updateFocus(); Data.refresh(); });
   });
 
   I18N.set(Prefs.language());
+  tickClock();
   checkNight();   // now, from the last forecast: not after the TV lists its apps, with the day look until then
   // LG's screensaver waits only when ours will show: not under a sheet (ours waits there), and not without photos.
   TV.holdScreenSaver(function () { return !sheetOpen() && saverPhotos().length > 0; });

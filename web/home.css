@@ -271,18 +271,38 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #clock {
   position: absolute;
   left: 76px;
-  top: 300px;
+  top: 160px;
   font-size: 176px;
   font-weight: 200;
   letter-spacing: -0.01em;
   line-height: 1;
   color: #1D1D1F;
-  display: none;
+  display: block;
 }
 #clock .date { display: block; font-size: 40px; font-weight: 500; letter-spacing: 0; margin-top: 18px; color: #6E6E73; }
-.no-picks #clock { display: block; }
 .night #clock { color: #F5F5F7; }
 .night #clock .date { color: rgba(245, 245, 247, 0.62); }
+
+#homeWeather { left: 80px; top: 430px; width: 1760px; height: 270px; color: #1D1D1F; }
+.night #homeWeather { color: #F5F5F7; }
+#homeWeather .home-weather-city { position: absolute; left: 32px; top: 20px; font-size: 25px; font-weight: 600; color: #6E6E73; }
+.night #homeWeather .home-weather-city { color: rgba(255, 255, 255, 0.7); }
+#homeWeather .home-weather-current { position: absolute; left: 32px; top: 58px; height: 94px; white-space: nowrap; }
+#homeWeather .home-weather-current .sym { width: 54px; height: 54px; vertical-align: 11px; margin-right: 16px; }
+#homeWeather .home-weather-temp { font-size: 88px; font-weight: 300; line-height: 94px; font-feature-settings: 'tnum'; }
+#homeWeather .home-weather-condition { position: absolute; left: 34px; top: 158px; font-size: 24px; font-weight: 500; white-space: nowrap; }
+#homeWeather .home-weather-range { position: absolute; left: 34px; top: 199px; font-size: 20px; font-weight: 500; color: #6E6E73; white-space: nowrap; font-feature-settings: 'tnum'; }
+.night #homeWeather .home-weather-range { color: rgba(255, 255, 255, 0.68); }
+#homeWeather .home-weather-empty { position: absolute; left: 34px; top: 92px; font-size: 24px; }
+#homeWeather .home-weather-forecast { position: absolute; left: 440px; right: 30px; top: 44px; height: 190px; border-left: 2px solid rgba(0, 0, 0, 0.1); }
+.night #homeWeather .home-weather-forecast { border-left-color: rgba(255, 255, 255, 0.14); }
+#homeWeather .home-weather-item { position: absolute; top: 0; text-align: center; font-feature-settings: 'tnum'; }
+#homeWeather .home-weather-item .time { font-size: 21px; font-weight: 500; color: #6E6E73; white-space: nowrap; }
+.night #homeWeather .home-weather-item .time { color: rgba(255, 255, 255, 0.68); }
+#homeWeather .home-weather-item .sym { display: block; width: 30px; height: 30px; margin: 21px auto 16px; }
+#homeWeather .home-weather-item .temp { font-size: 24px; font-weight: 500; white-space: nowrap; }
+#homeWeather .home-weather-item .low { margin-left: 5px; font-size: 20px; color: #6E6E73; }
+.night #homeWeather .home-weather-item .low { color: rgba(255, 255, 255, 0.68); }
 
 /* MARK: - Shelf: the glass bar with the apps, each in its brand color; focused, a tile grows 20% and rises. */
 
