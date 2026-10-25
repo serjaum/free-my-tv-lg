@@ -362,10 +362,10 @@
     tabs.innerHTML = '';
     var buttons = $('buttons');
     buttons.innerHTML = '';
-    var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['settings', tr('light|Settings')]];
-    for (var b = 0; b < 3; b++) {
-      var r = el('button', 'round' + (b === 2 ? ' last' : ''), buttons);
-      r.style.left = (1596 + 88 * b) + 'px';
+    var defs = [['hdmi', tr('HDMI Inputs')], ['settings', tr('light|Settings')]], offset = 3 - defs.length;
+    for (var b = 0; b < defs.length; b++) {
+      var r = el('button', 'round' + (b === defs.length - 1 ? ' last' : ''), buttons);
+      r.style.left = (1596 + 88 * (offset + b)) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.TOP, b);
@@ -870,8 +870,7 @@
   function activate() {
     switch (st.zone) {
       case Z.TOP:
-        if (st.top === 0) { var live = liveTV(); if (live) launcher(live.id, tr('Live TV'))(); }
-        else if (st.top === 1) { st.zone = Z.SHELF; openDrawer(); st.drawer = 1 < drawerInputs ? 1 : 0; updateFocus(); }
+        if (st.top === 0) { st.zone = Z.SHELF; openDrawer(); st.drawer = 1 < drawerInputs ? 1 : 0; updateFocus(); }
         else openSettings();
         return;
       case Z.CARDS:
@@ -923,7 +922,7 @@
         break;
       case Z.TOP:
         if (dx) {
-          st.top = Math.max(0, Math.min(2, st.top + dx));
+          st.top = Math.max(0, Math.min(1, st.top + dx));
         } else if (dy > 0) {
           if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
           else st.zone = Z.SHELF;
