@@ -240,7 +240,7 @@
     var word = el('div', 'word', box, app.title);
     if (wordSize) word.style.fontSize = wordSize + 'px';
     if (app.icon) {
-      var img = el('img', '', box), url = app.icon;
+      var img = el('img', app.iconFit === 'logo' ? 'logo' : '', box), url = app.icon;
       word.style.visibility = 'hidden';
       img.onerror = function () { if (img.parentNode) img.parentNode.removeChild(img); word.style.visibility = ''; };
       if (lifted[url]) { showLogo(img, box, top, bottom, lifted[url], !k); return; }
@@ -1128,7 +1128,7 @@
         if (hdmi1) {
           var exists = false;
           for (var j = 0; j < apps.length; j++) if (apps[j].id === hdmi1.id) { exists = true; break; }
-          if (!exists) apps.push({id: hdmi1.id, title: 'Caixinha', icon: 'icons/caixinha.svg', color: '#B85C19'});
+          if (!exists) apps.push({id: hdmi1.id, title: 'Caixinha', icon: 'icons/caixinha.png', iconFit: 'logo', color: '#B85C19'});
         }
         Data.setApps(apps);
         pickShelf();
